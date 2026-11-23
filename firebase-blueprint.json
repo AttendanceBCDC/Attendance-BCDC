@@ -1,0 +1,327 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Authenticated workspace user profile and preferences.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Firebase Auth UID of the user.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Display name of the clinic administrator or therapist.",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "clinicName": {
+          "type": "string",
+          "description": "Name of the therapy clinic or psychology center.",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "seeded": {
+          "type": "boolean",
+          "description": "Whether initial clinic sample data has been initialized."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of creation."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of last update."
+        }
+      },
+      "required": ["uid", "displayName", "clinicName", "seeded", "createdAt", "updatedAt"]
+    },
+    "Therapist": {
+      "title": "Therapist",
+      "description": "Therapist or psychologist practitioner in the clinic.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "description": "Workspace owner UID.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "name": {
+          "type": "string",
+          "description": "Full name of the therapist or psychologist.",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "specialty": {
+          "type": "string",
+          "description": "Primary therapy code or specialty (SI, TW, OT, BT, RM, FS, E).",
+          "enum": ["SI", "TW", "OT", "BT", "RM", "FS", "E"]
+        },
+        "roleTitle": {
+          "type": "string",
+          "description": "Job title such as Terapis Okupasi, Terapis Wicara, Psikolog Klinis.",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "monthlyTargetHours": {
+          "type": "number",
+          "description": "Target therapy hours per month."
+        },
+        "active": {
+          "type": "boolean",
+          "description": "Whether the therapist is currently active."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["ownerId", "name", "specialty", "roleTitle", "monthlyTargetHours", "active", "createdAt", "updatedAt"]
+    },
+    "Client": {
+      "title": "Client",
+      "description": "Therapy or psychology class client.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "program": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "defaultSppSessions": {
+          "type": "number"
+        },
+        "primaryTherapistId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["ownerId", "name", "program", "defaultSppSessions", "primaryTherapistId", "active", "createdAt", "updatedAt"]
+    },
+    "SppPackage": {
+      "title": "SppPackage",
+      "description": "Monthly SPP paid session package per client.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "clientId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "monthKey": {
+          "type": "string",
+          "minLength": 7,
+          "maxLength": 7,
+          "pattern": "^[0-9]{4}-[0-9]{2}$"
+        },
+        "paidSessions": {
+          "type": "number"
+        },
+        "packageName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "sppFee": {
+          "type": "number"
+        },
+        "paymentStatus": {
+          "type": "string",
+          "enum": ["Lunas", "Cicilan", "Belum Bayar"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["ownerId", "clientId", "monthKey", "paidSessions", "packageName", "sppFee", "paymentStatus", "createdAt", "updatedAt"]
+    },
+    "AttendanceEntry": {
+      "title": "AttendanceEntry",
+      "description": "Verified clinic attendance entry per client, day slot, therapist, and therapy code.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "monthKey": {
+          "type": "string",
+          "minLength": 7,
+          "maxLength": 7,
+          "pattern": "^[0-9]{4}-[0-9]{2}$"
+        },
+        "dayOfMonth": {
+          "type": "number"
+        },
+        "slot": {
+          "type": "number"
+        },
+        "clientId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "therapistId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "code": {
+          "type": "string",
+          "enum": ["SI", "TW", "OT", "BT", "RM", "FS", "E", "Izin", "Ganti", "Hutang", "Hangus"]
+        },
+        "hours": {
+          "type": "number"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 240
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["ownerId", "monthKey", "dayOfMonth", "slot", "clientId", "therapistId", "code", "hours", "notes", "createdAt", "updatedAt"]
+    },
+    "TherapistClaim": {
+      "title": "TherapistClaim",
+      "description": "Self-submitted therapist attendance log compared against verified system attendance.",
+      "type": "object",
+      "properties": {
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "monthKey": {
+          "type": "string",
+          "minLength": 7,
+          "maxLength": 7,
+          "pattern": "^[0-9]{4}-[0-9]{2}$"
+        },
+        "dayOfMonth": {
+          "type": "number"
+        },
+        "therapistId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "clientId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "code": {
+          "type": "string",
+          "enum": ["SI", "TW", "OT", "BT", "RM", "FS", "E", "Izin", "Ganti", "Hutang", "Hangus"]
+        },
+        "claimedHours": {
+          "type": "number"
+        },
+        "reconcileStatus": {
+          "type": "string",
+          "enum": ["pending", "matched", "discrepancy", "resolved"]
+        },
+        "claimNote": {
+          "type": "string",
+          "maxLength": 240
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["ownerId", "monthKey", "dayOfMonth", "therapistId", "clientId", "code", "claimedHours", "reconcileStatus", "claimNote", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Clinic workspace owner profile and seed status."
+    },
+    "/therapists/{therapistId}": {
+      "schema": { "$ref": "#/entities/Therapist" },
+      "description": "Therapists and psychologists managed by the clinic."
+    },
+    "/clients/{clientId}": {
+      "schema": { "$ref": "#/entities/Client" },
+      "description": "Therapy and psychology class clients."
+    },
+    "/sppPackages/{packageId}": {
+      "schema": { "$ref": "#/entities/SppPackage" },
+      "description": "Monthly SPP paid session packages per client."
+    },
+    "/attendanceEntries/{entryId}": {
+      "schema": { "$ref": "#/entities/AttendanceEntry" },
+      "description": "Verified system attendance records displayed in the monthly spreadsheet grid."
+    },
+    "/therapistClaims/{claimId}": {
+      "schema": { "$ref": "#/entities/TherapistClaim" },
+      "description": "Therapist-submitted attendance claims for reconciliation against verified system records."
+    }
+  }
+}

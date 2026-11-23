@@ -1,0 +1,6 @@
+{
+  "name": "BCDC Therapy & Psychology Attendance",
+  "description": "Dashboard analytics dan spreadsheet absensi interaktif untuk klinik terapis, kelas psikolog, rekonsiliasi jam terapis, dan utilisasi paket SPP bulanan.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
